@@ -19,5 +19,5 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/images/fondo_noche_canaria.png
+    - assets/images/canary_night_background.png
     - assets/images/denathrius.jpg

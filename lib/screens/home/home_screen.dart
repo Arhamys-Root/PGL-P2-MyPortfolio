@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/fondo_inicio.dart';
-import '../widgets/presentacion_inicio.dart';
-import '../widgets/tarjeta_islas.dart';
+import 'widgets/home_background.dart';
+import 'widgets/home_intro.dart';
+import 'widgets/islands_card.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

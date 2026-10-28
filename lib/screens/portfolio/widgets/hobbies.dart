@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../data/hobbies.dart';
-import 'tarjeta.dart';
+import '../../../data/hobbies.dart';
+import 'info_card.dart';
 
 class Hobbies extends StatelessWidget {
   const Hobbies({super.key});

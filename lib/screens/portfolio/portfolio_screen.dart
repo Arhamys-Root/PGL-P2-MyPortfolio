@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/hobbies.dart';
-import '../widgets/perfil.dart';
+import 'widgets/hobbies.dart';
+import 'widgets/profile.dart';
 
 class PortfolioScreen extends StatelessWidget {
   const PortfolioScreen({super.key});

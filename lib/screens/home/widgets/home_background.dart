@@ -8,7 +8,7 @@ class FondoInicio extends StatelessWidget {
     return Stack(
       fit: StackFit.expand,
       children: [
-        Image.asset('assets/images/fondo_noche_canaria.png', fit: BoxFit.cover),
+        Image.asset('assets/images/canary_night_background.png', fit: BoxFit.cover),
         const DecoratedBox(
           decoration: BoxDecoration(
             gradient: LinearGradient(
