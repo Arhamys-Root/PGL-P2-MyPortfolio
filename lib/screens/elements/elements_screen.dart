@@ -31,6 +31,31 @@ class ElementsScreen extends StatefulWidget {
 class _ElementsScreenState extends State<ElementsScreen> {
   final List<PortfolioElement> _elements = [];
 
+  Future<void> _deleteAll() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Borrar todos los elementos'),
+        content: Text(
+          '¿Quieres borrar los ${_elements.length} elementos de la lista? '
+          'Esta acción no se puede deshacer.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Cancelar'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Confirmar borrado'),
+          ),
+        ],
+      ),
+    );
+    if (!mounted || confirmed != true) return;
+    setState(() => _elements.clear());
+  }
+
   Future<void> _addElement() async {
     final result = await showDialog<PortfolioElement>(
       context: context,
@@ -59,6 +84,11 @@ class _ElementsScreenState extends State<ElementsScreen> {
                 onPressed: _addElement,
                 icon: const Icon(Icons.add),
                 label: const Text('Añadir elemento'),
+              ),
+              OutlinedButton.icon(
+                onPressed: _elements.isEmpty ? null : _deleteAll,
+                icon: const Icon(Icons.delete_sweep_outlined),
+                label: const Text('Borrar todos'),
               ),
             ],
           ),
