@@ -36,6 +36,12 @@ class AppDrawer extends StatelessWidget {
               onTap: () => navigate('/'),
             ),
             ListTile(
+              leading: const Icon(Icons.format_list_bulleted),
+              title: const Text('Mis elementos'),
+              selected: currentPath == '/elements',
+              onTap: () => navigate('/elements'),
+            ),
+            ListTile(
               leading: const Icon(Icons.person_outline),
               title: const Text('Mi portfolio'),
               selected: currentPath == '/portfolio',
