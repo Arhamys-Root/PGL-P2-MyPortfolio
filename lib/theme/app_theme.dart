@@ -21,8 +21,6 @@ class AppTheme {
       backgroundColor: background,
       foregroundColor: text,
     ),
-    drawerTheme: const DrawerThemeData(
-      backgroundColor: Color(0xFF151A30),
-    ),
+    drawerTheme: const DrawerThemeData(backgroundColor: Color(0xFF151A30)),
   );
 }

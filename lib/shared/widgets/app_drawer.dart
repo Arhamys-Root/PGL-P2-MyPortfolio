@@ -1,24 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class AppDrawer extends StatelessWidget {
-  const AppDrawer({super.key, required this.currentPath});
+import '../../router/app_destination.dart';
 
-  final String currentPath;
+class AppDrawer extends StatelessWidget {
+  const AppDrawer({super.key, required this.currentDestination});
+
+  final AppDestination currentDestination;
+
+  void _navigate(BuildContext context, AppDestination destination) {
+    final router = GoRouter.of(context);
+    Navigator.of(context).pop();
+    if (destination != currentDestination) router.go(destination.path);
+  }
 
   @override
   Widget build(BuildContext context) {
-    void navigate(String path) {
-      Navigator.of(context).pop();
-      context.go(path);
-    }
-
     return Drawer(
       child: SafeArea(
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            const DrawerHeader(
+            const Padding(
+              padding: EdgeInsets.fromLTRB(16, 16, 16, 24),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -29,24 +33,13 @@ class AppDrawer extends StatelessWidget {
                 ],
               ),
             ),
-            ListTile(
-              leading: const Icon(Icons.home_outlined),
-              title: const Text('Inicio'),
-              selected: currentPath == '/',
-              onTap: () => navigate('/'),
-            ),
-            ListTile(
-              leading: const Icon(Icons.format_list_bulleted),
-              title: const Text('Mis elementos'),
-              selected: currentPath == '/elements',
-              onTap: () => navigate('/elements'),
-            ),
-            ListTile(
-              leading: const Icon(Icons.person_outline),
-              title: const Text('Mi portfolio'),
-              selected: currentPath == '/portfolio',
-              onTap: () => navigate('/portfolio'),
-            ),
+            for (final destination in AppDestination.values)
+              ListTile(
+                leading: Icon(destination.icon),
+                title: Text(destination.label),
+                selected: currentDestination == destination,
+                onTap: () => _navigate(context, destination),
+              ),
           ],
         ),
       ),

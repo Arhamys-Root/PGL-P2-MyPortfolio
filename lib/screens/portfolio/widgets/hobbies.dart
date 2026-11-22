@@ -8,23 +8,32 @@ class Hobbies extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
+    return SingleChildScrollView(
       padding: const EdgeInsets.all(20),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 12,
-        mainAxisSpacing: 12,
-        mainAxisExtent: 180,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          const spacing = 12.0;
+          final cardWidth = constraints.maxWidth >= 340
+              ? (constraints.maxWidth - spacing) / 2
+              : constraints.maxWidth;
+
+          return Wrap(
+            spacing: spacing,
+            runSpacing: spacing,
+            children: [
+              for (final hobby in hobbies)
+                SizedBox(
+                  width: cardWidth,
+                  child: Tarjeta(
+                    icon: hobby.icon,
+                    title: hobby.title,
+                    subtitle: hobby.subtitle,
+                  ),
+                ),
+            ],
+          );
+        },
       ),
-      itemCount: hobbies.length,
-      itemBuilder: (context, index) {
-        final hobby = hobbies[index];
-        return Tarjeta(
-          icon: hobby.icon,
-          title: hobby.title,
-          subtitle: hobby.subtitle,
-        );
-      },
     );
   }
 }

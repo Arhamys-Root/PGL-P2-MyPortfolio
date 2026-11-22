@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../shared/app_images.dart';
+
 class FondoInicio extends StatelessWidget {
   const FondoInicio({super.key});
 
@@ -8,7 +10,11 @@ class FondoInicio extends StatelessWidget {
     return Stack(
       fit: StackFit.expand,
       children: [
-        Image.asset('assets/images/canary_night_background.png', fit: BoxFit.cover),
+        Image.asset(
+          AppImages.canaryNight,
+          fit: BoxFit.cover,
+          excludeFromSemantics: true,
+        ),
         const DecoratedBox(
           decoration: BoxDecoration(
             gradient: LinearGradient(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../shared/app_images.dart';
+
 class Perfil extends StatelessWidget {
   const Perfil({super.key});
 
@@ -10,7 +12,7 @@ class Perfil extends StatelessWidget {
       children: const [
         CircleAvatar(
           radius: 48,
-          backgroundImage: AssetImage('assets/images/denathrius.jpg'),
+          backgroundImage: AssetImage(AppImages.profile),
         ),
         SizedBox(height: 20),
         Text(
