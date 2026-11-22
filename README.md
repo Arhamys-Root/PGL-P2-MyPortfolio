@@ -1,46 +1,44 @@
-# nocheislas
+﻿# NocheIslas
 
-A new Flutter project.
+Aplicación Flutter sobre el ocio nocturno en Canarias, con un portfolio personal y una lista de elementos.
 
-## CRUD de elementos
+## Ejecutar la aplicación
 
-Desde el Drawer, abre **Mis elementos**. Puedes añadir elementos con nombre,
-descripción breve y categoría y borrarlos. El contador se actualiza
-con la lista y cada categoría muestra una imagen local (ocio nocturno o
-videojuegos). El formulario valida los campos obligatorios.
+```sh
+flutter pub get
+flutter run
+```
 
-El botón **Borrar todos** permite vaciar la lista tras confirmar en un modal.
-Cancelar conserva los elementos. El botón se desactiva cuando la lista está vacía.
+## Gestión de sesión
 
-Los elementos se guardan en memoria mientras la pantalla permanece abierta;
-al salir de ella o reiniciar la aplicación la lista se vacía.
+1. Al abrir la app aparece **Iniciar sesión**. Si hay un JWT guardado, se comprueba con `GET /users/check-token`. Una sesión válida abre Inicio automáticamente.
+2. Desde **Crear cuenta**, introduce tu nombre completo, un email válido y una contraseña de al menos ocho caracteres con mayúscula, minúscula, número y símbolo. La app enseña la respuesta de la API y vuelve a Iniciar sesión tras confirmar el registro.
+3. En **Iniciar sesión**, introduce el email y la contraseña. Tras un acceso correcto, la app guarda el JWT en el almacenamiento seguro del dispositivo y abre Inicio.
+4. Desde Inicio, **Mensaje de bienvenida** pide a la API el saludo personalizado y lo muestra en una alerta. **Cerrar sesión** elimina el JWT y vuelve al login.
 
-Validación: `flutter analyze` y `flutter test`.
+La app se conecta a [My Users API](https://my-users-api.onrender.com). El servicio HTTP usa JSON para el registro y el login, y envía el JWT en la cabecera `Authorization: Bearer` para validar la sesión y obtener la bienvenida. En Android, el almacenamiento seguro se apoya en Android Keystore. En iOS usa Keychain. [Contrato de los endpoints](https://github.com/adhernea/my-users-api/blob/main/docs/endpoints_api.md)
 
-## Capturas de pantalla
+## Capturas de gestión de sesión
 
-Capturas de la aplicación funcionando en el emulador Android.
+Capturas del emulador Android con una cuenta de prueba de la API.
 
-### Elementos: lista vacía
+| Registro exitoso | Login fallido |
+| --- | --- |
+| ![Alerta de registro exitoso](docs/capturas-sesion/registro-exitoso.png) | ![Alerta de credenciales incorrectas](docs/capturas-sesion/login-fallido.png) |
 
-![Lista vacía con contador a cero](assets/images/elements_empty.png)
+| Login exitoso | Mensaje de bienvenida |
+| --- | --- |
+| ![Alerta de inicio de sesión exitoso](docs/capturas-sesion/login-exitoso.png) | ![Alerta de bienvenida personalizada de la API](docs/capturas-sesion/bienvenida.png) |
 
-### Formulario para añadir un elemento
+## Portfolio y elementos
 
-![Diálogo con nombre, descripción breve y selector de categoría](assets/images/elements_form.png)
+El menú de la sesión da acceso al perfil, las aficiones y **Mis elementos**. Los elementos permiten añadir nombre, descripción y categoría, borrar una tarjeta o vaciar la lista tras confirmar. La lista se guarda en memoria mientras su pantalla está abierta.
 
-### Lista dinámica de elementos
+## Verificación
 
-![Elemento añadido con imagen de categoría, botón de borrado y contador actualizado](assets/images/elements_list.png)
+```sh
+flutter analyze
+flutter test
+```
 
-### Inicio
-
-![Pantalla de inicio](assets/images/welcome_photo.png)
-
-### Perfil
-
-![Pantalla de perfil](assets/images/perfil_photo.png)
-
-### Hobbies
-
-![Pantalla de hobbies](assets/images/hobbies_photo.png)
+Las pruebas cubren el registro, el login correcto e incorrecto, la recuperación de sesión, el rechazo de un token caducado, la bienvenida, el cierre de sesión y las pantallas de elementos y portfolio.
