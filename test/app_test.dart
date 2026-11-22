@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart' as http;
+import 'package:http/testing.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:pgl_p2_myportfolio/app.dart';
 
@@ -22,9 +25,20 @@ Future<void> addElement(WidgetTester tester, String name) async {
   await tester.pumpAndSettle();
 }
 
+NocheIslasApp signedInApp() {
+  FlutterSecureStorage.setMockInitialValues({'session_jwt': 'saved-token'});
+  return NocheIslasApp(
+    client: MockClient((request) async {
+      expect(request.url.path, '/users/check-token');
+      expect(request.headers['authorization'], 'Bearer saved-token');
+      return http.Response('{"message":"Token v?lido"}', 200);
+    }),
+  );
+}
+
 void main() {
   testWidgets('Valida, añade y borra elementos desde el menú', (tester) async {
-    await tester.pumpWidget(const NocheIslasApp());
+    await tester.pumpWidget(signedInApp());
     await tester.pumpAndSettle();
     await openDestination(tester, 'Mis elementos');
 
@@ -82,7 +96,7 @@ void main() {
           size: Size(320, 600),
           textScaler: TextScaler.linear(2),
         ),
-        child: const NocheIslasApp(),
+        child: signedInApp(),
       ),
     );
     await tester.pumpAndSettle();
