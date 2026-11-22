@@ -18,21 +18,24 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   bool _busy = false;
 
-  Future<void> _showWelcome() async {
+  Future<void> _runSessionAction(Future<void> Function() action) async {
+    if (_busy) return;
     setState(() => _busy = true);
-    final response = await widget.session.welcome();
-    if (!mounted) return;
-    await showMessage(context, 'Bienvenida', response.message);
-    if (!mounted) return;
-    if (response.statusCode == 401) {
-      await _signOut();
-    } else {
-      setState(() => _busy = false);
+    try {
+      await action();
+    } finally {
+      if (mounted) setState(() => _busy = false);
     }
   }
 
+  Future<void> _showWelcome() async {
+    final response = await widget.session.welcome();
+    if (!mounted) return;
+    await showMessage(context, 'Bienvenida', response.message);
+    if (mounted && response.statusCode == 401) await _signOut();
+  }
+
   Future<void> _signOut() async {
-    setState(() => _busy = true);
     try {
       await widget.session.signOut();
     } catch (_) {
@@ -43,7 +46,6 @@ class _HomeScreenState extends State<HomeScreen> {
         'No se pudo eliminar la sesión guardada.',
       );
     }
-    if (mounted) setState(() => _busy = false);
   }
 
   @override
@@ -68,11 +70,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   runSpacing: 8,
                   children: [
                     FilledButton(
-                      onPressed: _busy ? null : _showWelcome,
+                      onPressed: _busy
+                          ? null
+                          : () => _runSessionAction(_showWelcome),
                       child: const Text('Mensaje de bienvenida'),
                     ),
                     OutlinedButton(
-                      onPressed: _busy ? null : _signOut,
+                      onPressed: _busy
+                          ? null
+                          : () => _runSessionAction(_signOut),
                       child: const Text('Cerrar sesión'),
                     ),
                   ],

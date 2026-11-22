@@ -82,8 +82,9 @@ void main() {
     await enterCredentials(tester, 'Segura123!');
     await press(tester, 'Entrar');
     expect(find.text('Inicio correcto'), findsOneWidget);
-    await press(tester, 'Aceptar');
     expect(await storage.read(key: 'session_jwt'), 'test-jwt');
+    expect(find.byTooltip('Open navigation menu'), findsNothing);
+    await press(tester, 'Aceptar');
 
     await tester.scrollUntilVisible(find.text('Mensaje de bienvenida'), 150);
     await press(tester, 'Mensaje de bienvenida');

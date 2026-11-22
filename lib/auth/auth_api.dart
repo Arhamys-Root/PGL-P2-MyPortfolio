@@ -64,16 +64,7 @@ class AuthApi {
           .send(request)
           .then(http.Response.fromStream)
           .timeout(const Duration(seconds: 30));
-      final data = jsonDecode(utf8.decode(response.bodyBytes));
-      if (data is Map<String, dynamic> && data['message'] is String) {
-        final jwt = data['token'];
-        return AuthResponse(
-          response.statusCode,
-          data['message'] as String,
-          token: jwt is String && jwt.trim().isNotEmpty ? jwt : null,
-        );
-      }
-      return const AuthResponse(0, 'La API devolvió una respuesta inesperada.');
+      return _decodeResponse(response);
     } on FormatException {
       return const AuthResponse(0, 'La API devolvió una respuesta inesperada.');
     } on TimeoutException {
@@ -81,5 +72,18 @@ class AuthApi {
     } on http.ClientException {
       return const AuthResponse(0, 'No se pudo conectar con la API.');
     }
+  }
+
+  AuthResponse _decodeResponse(http.Response response) {
+    final data = jsonDecode(utf8.decode(response.bodyBytes));
+    if (data is Map<String, dynamic> && data['message'] is String) {
+      final jwt = data['token'];
+      return AuthResponse(
+        response.statusCode,
+        data['message'] as String,
+        token: jwt is String && jwt.trim().isNotEmpty ? jwt : null,
+      );
+    }
+    return const AuthResponse(0, 'La API devolvió una respuesta inesperada.');
   }
 }

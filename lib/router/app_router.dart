@@ -12,19 +12,7 @@ import 'app_destination.dart';
 GoRouter createAppRouter(SessionController session) => GoRouter(
   initialLocation: AuthScreen.loginPath,
   refreshListenable: session,
-  redirect: (context, state) {
-    final path = state.uri.path;
-    if (session.isAuthenticated) {
-      return path == AuthScreen.loginPath || path == AuthScreen.registerPath
-          ? AppDestination.home.path
-          : null;
-    }
-    if (path == AuthScreen.loginPath ||
-        (!session.isRestoring && path == AuthScreen.registerPath)) {
-      return null;
-    }
-    return AuthScreen.loginPath;
-  },
+  redirect: (context, state) => _sessionRedirect(session, state.uri.path),
   routes: [
     GoRoute(
       path: AuthScreen.loginPath,
@@ -36,15 +24,7 @@ GoRouter createAppRouter(SessionController session) => GoRouter(
           AuthScreen(session: session, registering: true),
     ),
     ShellRoute(
-      builder: (context, state, child) {
-        final destination = AppDestination.fromPath(state.uri.path);
-
-        return Scaffold(
-          appBar: AppBar(title: Text(destination.title)),
-          drawer: AppDrawer(currentDestination: destination),
-          body: child,
-        );
-      },
+      builder: _buildAppShell,
       routes: [
         GoRoute(
           path: AppDestination.elements.path,
@@ -62,3 +42,26 @@ GoRouter createAppRouter(SessionController session) => GoRouter(
     ),
   ],
 );
+
+String? _sessionRedirect(SessionController session, String path) {
+  if (session.isAuthenticated) {
+    return path == AuthScreen.loginPath || path == AuthScreen.registerPath
+        ? AppDestination.home.path
+        : null;
+  }
+  if (path == AuthScreen.loginPath ||
+      (!session.isRestoring && path == AuthScreen.registerPath)) {
+    return null;
+  }
+  return AuthScreen.loginPath;
+}
+
+Widget _buildAppShell(BuildContext context, GoRouterState state, Widget child) {
+  final destination = AppDestination.fromPath(state.uri.path);
+
+  return Scaffold(
+    appBar: AppBar(title: Text(destination.title)),
+    drawer: AppDrawer(currentDestination: destination),
+    body: child,
+  );
+}

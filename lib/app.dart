@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 
 import 'auth/auth_api.dart';
 import 'auth/session_controller.dart';
+import 'auth/session_token_store.dart';
 import 'router/app_router.dart';
 import 'theme/app_theme.dart';
 
@@ -22,7 +23,7 @@ class _NocheIslasAppState extends State<NocheIslasApp> {
   late final _client = widget.client ?? http.Client();
   late final _session = SessionController(
     AuthApi(_client),
-    const FlutterSecureStorage(),
+    const SessionTokenStore(FlutterSecureStorage()),
   );
   late final _router = createAppRouter(_session);
 
